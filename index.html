@@ -18,17 +18,13 @@
     .amili-metrics{display:flex;flex:1;align-items:stretch;}
     .amili-inputs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 20px;}
 
-    @media(max-width:780px){
+    @media(max-width:420px){
       .amili-results{flex-wrap:wrap;}
       #amili-total-cell{flex:1 1 100%!important;min-width:0;}
       .amili-metrics{flex:1 1 100%;flex-wrap:wrap;}
       .amili-metrics > div{flex:1 1 50%!important;border-right:none!important;border-bottom:1px solid rgba(23,24,15,.07);}
       .amili-roi-cta{flex:1 1 100%!important;border-left:none!important;border-top:1px solid rgba(23,24,15,.07);justify-content:space-between;}
-      .amili-inputs-grid{grid-template-columns:1fr 1fr;}
-    }
-    @media(max-width:460px){
-      .amili-metrics > div{flex:1 1 100%!important;}
-      .amili-inputs-grid{grid-template-columns:1fr!important;}
+      .amili-inputs-grid{grid-template-columns:1fr 1fr!important;}
     }
   </style>
 </head>
