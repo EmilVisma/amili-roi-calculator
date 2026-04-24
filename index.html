@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ROI-kalkulator | Amili</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=IBM+Plex+Serif:wght@700&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:#ffffff;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+    input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3px;border-radius:100px;outline:none;cursor:pointer;border:none;display:block;}
+    input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:#00e9e8;border:2px solid #fff;box-shadow:0 0 0 1px #00e9e8;cursor:pointer;margin-top:-6px;}
+    input[type=range]::-webkit-slider-runnable-track{height:3px;border-radius:100px;}
+    input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#00e9e8;border:2px solid #fff;cursor:pointer;}
+    input[type=range]::-moz-range-track{height:3px;border-radius:100px;background:rgba(23,24,15,.1);}
+
+    .amili-results{display:flex;align-items:stretch;background:#fff;border-radius:16px 16px 0 0;border:1px solid rgba(23,24,15,.08);border-bottom:none;overflow:hidden;}
+    .amili-metrics{display:flex;flex:1;align-items:stretch;}
+    .amili-inputs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 24px;}
+
+    @media(max-width:780px){
+      .amili-results{flex-wrap:wrap;}
+      #amili-total-cell{flex:1 1 100%!important;min-width:0;}
+      .amili-metrics{flex:1 1 100%;flex-wrap:wrap;}
+      .amili-metrics > div{flex:1 1 50%!important;border-right:none!important;border-bottom:1px solid rgba(23,24,15,.07);}
+      .amili-roi-cta{flex:1 1 100%!important;border-left:none!important;border-top:1px solid rgba(23,24,15,.07);justify-content:space-between;}
+      .amili-inputs-grid{grid-template-columns:1fr 1fr;}
+    }
+    @media(max-width:460px){
+      .amili-metrics > div{flex:1 1 100%!important;}
+      .amili-inputs-grid{grid-template-columns:1fr!important;}
+    }
+  </style>
+</head>
+<body>
+
+<div style="padding:16px 16px 14px;background:#ffffff;">
+
+  <h2 style="font-family:'IBM Plex Serif',serif;font-size:18px;font-weight:700;color:#17180f;margin:0 0 10px;line-height:1.2;">Hvor mye kan du spare med Amili?</h2>
+
+  <!-- Results strip -->
+  <div class="amili-results">
+
+    <div id="amili-total-cell" style="flex:0 0 168px;padding:14px 18px;background:#00e9e8;display:flex;flex-direction:column;justify-content:center;gap:2px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(23,24,15,.55);margin-bottom:3px;">Netto besparelse/år</div>
+      <div id="res-total" style="font-family:'IBM Plex Serif',serif;font-size:22px;font-weight:700;color:#17180f;letter-spacing:-.02em;line-height:1;">kr 0</div>
+    </div>
+
+    <div class="amili-metrics">
+      <div style="flex:1;padding:14px 12px;border-right:1px solid rgba(23,24,15,.07);display:flex;flex-direction:column;justify-content:center;gap:3px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(23,24,15,.4);">Spart arbeid</div>
+        <div id="res-labor" style="font-size:13px;font-weight:700;color:#17180f;white-space:nowrap;">kr 0</div>
+      </div>
+      <div style="flex:1;padding:14px 12px;border-right:1px solid rgba(23,24,15,.07);display:flex;flex-direction:column;justify-content:center;gap:3px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(23,24,15,.4);">Raskere betaling</div>
+        <div id="res-cashflow" style="font-size:13px;font-weight:700;color:#17180f;white-space:nowrap;">kr 0</div>
+      </div>
+      <div style="flex:1;padding:14px 12px;border-right:1px solid rgba(23,24,15,.07);display:flex;flex-direction:column;justify-content:center;gap:3px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(23,24,15,.4);">Økt inndrivelse</div>
+        <div id="res-recovery" style="font-size:13px;font-weight:700;color:#17180f;white-space:nowrap;">kr 0</div>
+      </div>
+      <div style="flex:1;padding:14px 12px;display:flex;flex-direction:column;justify-content:center;gap:3px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(23,24,15,.4);">Kostnad Amili</div>
+        <div id="res-fee" style="font-size:13px;font-weight:700;color:rgba(23,24,15,.45);white-space:nowrap;">- kr 0</div>
+      </div>
+    </div>
+
+    <div class="amili-roi-cta" style="flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:14px 18px;border-left:1px solid rgba(23,24,15,.07);">
+      <div>
+        <div style="font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(23,24,15,.4);margin-bottom:3px;">Estimert ROI</div>
+        <div id="res-roi" style="font-family:'IBM Plex Serif',serif;font-size:22px;font-weight:700;color:#17180f;letter-spacing:-.02em;line-height:1;">0 %</div>
+      </div>
+      <a href="https://amili.no/no/kontakt/" target="_blank" style="display:inline-block;background:#00e9e8;color:#17180f;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;padding:9px 16px;border-radius:100px;text-decoration:none;white-space:nowrap;line-height:1;">Bli kunde</a>
+    </div>
+
+  </div>
+
+  <!-- Inputs -->
+  <div style="background:#fff;border-radius:0 0 16px 16px;border:1px solid rgba(23,24,15,.08);padding:14px 16px 16px;">
+    <div class="amili-inputs-grid">
+
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+          <span style="font-size:12px;font-weight:500;color:rgba(23,24,15,.5);line-height:1.3;">Fakturaer/krav per måned</span>
+          <span id="lbl-invoices" style="font-size:12px;font-weight:700;color:#17180f;background:#dafdff;border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;">100</span>
+        </div>
+        <input type="range" id="rng-invoices" min="10" max="2000" step="10" value="100">
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+          <span style="font-size:12px;font-weight:500;color:rgba(23,24,15,.5);line-height:1.3;">Gjennomsnittlig kravbeløp (NOK)</span>
+          <span id="lbl-avgAmount" style="font-size:12px;font-weight:700;color:#17180f;background:#dafdff;border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;">8 000</span>
+        </div>
+        <input type="range" id="rng-avgAmount" min="500" max="100000" step="500" value="8000">
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+          <span style="font-size:12px;font-weight:500;color:rgba(23,24,15,.5);line-height:1.3;">Betalingstid i dag (dager)</span>
+          <span id="lbl-dso" style="font-size:12px;font-weight:700;color:#17180f;background:#dafdff;border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;">65 d</span>
+        </div>
+        <input type="range" id="rng-dso" min="15" max="150" step="5" value="65">
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+          <span style="font-size:12px;font-weight:500;color:rgba(23,24,15,.5);line-height:1.3;">Timer på purring/inkasso per måned</span>
+          <span id="lbl-hours" style="font-size:12px;font-weight:700;color:#17180f;background:#dafdff;border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;">35 t</span>
+        </div>
+        <input type="range" id="rng-hours" min="2" max="200" step="1" value="35">
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+          <span style="font-size:12px;font-weight:500;color:rgba(23,24,15,.5);line-height:1.3;">Timekostnad inkl. overhead (NOK/t)</span>
+          <span id="lbl-hourly" style="font-size:12px;font-weight:700;color:#17180f;background:#dafdff;border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;">650</span>
+        </div>
+        <input type="range" id="rng-hourly" min="200" max="1500" step="50" value="650">
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">
+          <span style="font-size:12px;font-weight:500;color:rgba(23,24,15,.5);line-height:1.3;">Nåværende innkassoprosent</span>
+          <span id="lbl-rate" style="font-size:12px;font-weight:700;color:#17180f;background:#dafdff;border-radius:4px;padding:2px 8px;white-space:nowrap;flex-shrink:0;">70 %</span>
+        </div>
+        <input type="range" id="rng-rate" min="30" max="95" step="1" value="70">
+      </div>
+
+    </div>
+  </div>
+
+  <p style="text-align:center;margin:10px 0 0;font-size:11px;color:rgba(23,24,15,.4);">Estimater basert på bransjesnitt. Faktiske tall vil variere. <a href="https://amili.no/no/" style="color:rgba(23,24,15,.6);text-decoration:none;border-bottom:1px solid rgba(23,24,15,.2);">amili.no</a></p>
+
+</div>
+
+<script>
+(function(){
+  var DSO=32,RATE=92,CAP=0.05,FEE=0.18;
+  var s={invoices:100,avgAmount:8000,dso:65,hours:35,hourly:650,rate:70};
+
+  function num(n){
+    n=Math.round(n);
+    var a=n.toString(),r='',i=a.length;
+    while(i>0){r=(i<a.length?' ':'')+a.slice(Math.max(0,i-3),i)+r;i-=3;}
+    return r;
+  }
+  function fmt(n){return 'kr '+num(n);}
+  function g(id){return document.getElementById(id);}
+
+  function fill(el){
+    var p=((+el.value - +el.min)/(+el.max - +el.min))*100;
+    el.style.background='linear-gradient(to right,#00e9e8 '+p+'%,rgba(23,24,15,.10) '+p+'%)';
+  }
+
+  function calc(){
+    var annual=s.invoices*12*s.avgAmount;
+    var labor=s.hours*12*s.hourly;
+    var cf=Math.max(0,s.dso-DSO)/365*annual*CAP;
+    var aC=annual*(RATE/100);
+    var recov=Math.max(0,aC-annual*(s.rate/100));
+    var fee=aC*FEE;
+    var net=labor+cf+recov-fee;
+    var roi=fee>0?(net/fee)*100:0;
+    var e;
+    e=g('res-labor');    if(e)e.textContent=fmt(labor);
+    e=g('res-cashflow'); if(e)e.textContent=fmt(cf);
+    e=g('res-recovery'); if(e)e.textContent=fmt(recov);
+    e=g('res-fee');      if(e)e.textContent='- '+fmt(fee);
+    e=g('res-total');    if(e)e.textContent=fmt(net);
+    e=g('res-roi');      if(e)e.textContent=Math.round(roi)+' %';
+    e=g('amili-total-cell'); if(e)e.style.background=net>=0?'#00e9e8':'#ffb3b3';
+  }
+
+  function bind(id,field,fn){
+    var el=g(id); if(!el)return;
+    fill(el);
+    el.addEventListener('input',function(){
+      s[field]=+this.value;
+      var l=g('lbl-'+field); if(l)l.textContent=fn(this.value);
+      fill(this); calc();
+    });
+  }
+
+  function init(){
+    if(!g('rng-invoices')){setTimeout(init,50);return;}
+    bind('rng-invoices','invoices', function(v){return num(+v);});
+    bind('rng-avgAmount','avgAmount',function(v){return num(+v);});
+    bind('rng-dso','dso',            function(v){return v+' d';});
+    bind('rng-hours','hours',        function(v){return v+' t';});
+    bind('rng-hourly','hourly',      function(v){return num(+v);});
+    bind('rng-rate','rate',          function(v){return v+' %';});
+    calc();
+  }
+
+  init();
+})();
+</script>
+
+</body>
+</html>
