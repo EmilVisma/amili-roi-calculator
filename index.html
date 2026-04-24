@@ -16,7 +16,7 @@
 
     .amili-results{display:flex;align-items:stretch;background:#fff;border-radius:16px 16px 0 0;border:1px solid rgba(23,24,15,.08);border-bottom:none;overflow:hidden;}
     .amili-metrics{display:flex;flex:1;align-items:stretch;}
-    .amili-inputs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 24px;}
+    .amili-inputs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 20px;}
 
     @media(max-width:780px){
       .amili-results{flex-wrap:wrap;}
@@ -34,49 +34,49 @@
 </head>
 <body>
 
-<div style="padding:16px 16px 14px;background:#ffffff;">
+<div style="padding:12px 14px 10px;background:#ffffff;">
 
-  <h2 style="font-family:'IBM Plex Serif',serif;font-size:18px;font-weight:700;color:#17180f;margin:0 0 10px;line-height:1.2;">Hvor mye kan du spare med Amili?</h2>
+  <h2 style="font-family:'IBM Plex Serif',serif;font-size:16px;font-weight:700;color:#17180f;margin:0 0 8px;line-height:1.2;">Hvor mye kan du spare med Amili?</h2>
 
   <!-- Results strip -->
   <div class="amili-results">
 
-    <div id="amili-total-cell" style="flex:0 0 168px;padding:14px 18px;background:#00e9e8;display:flex;flex-direction:column;justify-content:center;gap:2px;">
-      <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(23,24,15,.55);margin-bottom:3px;">Netto besparelse/år</div>
-      <div id="res-total" style="font-family:'IBM Plex Serif',serif;font-size:22px;font-weight:700;color:#17180f;letter-spacing:-.02em;line-height:1;">kr 0</div>
+    <div id="amili-total-cell" style="flex:0 0 152px;padding:10px 14px;background:#00e9e8;display:flex;flex-direction:column;justify-content:center;gap:2px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(23,24,15,.55);margin-bottom:2px;">Netto besparelse/år</div>
+      <div id="res-total" style="font-family:'IBM Plex Serif',serif;font-size:20px;font-weight:700;color:#17180f;letter-spacing:-.02em;line-height:1;">kr 0</div>
     </div>
 
     <div class="amili-metrics">
-      <div style="flex:1;padding:14px 12px;border-right:1px solid rgba(23,24,15,.07);display:flex;flex-direction:column;justify-content:center;gap:3px;">
+      <div style="flex:1;padding:10px 10px;border-right:1px solid rgba(23,24,15,.07);display:flex;flex-direction:column;justify-content:center;gap:2px;">
         <div style="font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(23,24,15,.4);">Spart arbeid</div>
-        <div id="res-labor" style="font-size:13px;font-weight:700;color:#17180f;white-space:nowrap;">kr 0</div>
+        <div id="res-labor" style="font-size:12px;font-weight:700;color:#17180f;white-space:nowrap;">kr 0</div>
       </div>
-      <div style="flex:1;padding:14px 12px;border-right:1px solid rgba(23,24,15,.07);display:flex;flex-direction:column;justify-content:center;gap:3px;">
+      <div style="flex:1;padding:10px 10px;border-right:1px solid rgba(23,24,15,.07);display:flex;flex-direction:column;justify-content:center;gap:2px;">
         <div style="font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(23,24,15,.4);">Raskere betaling</div>
-        <div id="res-cashflow" style="font-size:13px;font-weight:700;color:#17180f;white-space:nowrap;">kr 0</div>
+        <div id="res-cashflow" style="font-size:12px;font-weight:700;color:#17180f;white-space:nowrap;">kr 0</div>
       </div>
-      <div style="flex:1;padding:14px 12px;border-right:1px solid rgba(23,24,15,.07);display:flex;flex-direction:column;justify-content:center;gap:3px;">
+      <div style="flex:1;padding:10px 10px;border-right:1px solid rgba(23,24,15,.07);display:flex;flex-direction:column;justify-content:center;gap:2px;">
         <div style="font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(23,24,15,.4);">Økt inndrivelse</div>
-        <div id="res-recovery" style="font-size:13px;font-weight:700;color:#17180f;white-space:nowrap;">kr 0</div>
+        <div id="res-recovery" style="font-size:12px;font-weight:700;color:#17180f;white-space:nowrap;">kr 0</div>
       </div>
-      <div style="flex:1;padding:14px 12px;display:flex;flex-direction:column;justify-content:center;gap:3px;">
+      <div style="flex:1;padding:10px 10px;display:flex;flex-direction:column;justify-content:center;gap:2px;">
         <div style="font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(23,24,15,.4);">Kostnad Amili</div>
-        <div id="res-fee" style="font-size:13px;font-weight:700;color:rgba(23,24,15,.45);white-space:nowrap;">- kr 0</div>
+        <div id="res-fee" style="font-size:12px;font-weight:700;color:rgba(23,24,15,.45);white-space:nowrap;">- kr 0</div>
       </div>
     </div>
 
-    <div class="amili-roi-cta" style="flex:0 0 auto;display:flex;align-items:center;gap:14px;padding:14px 18px;border-left:1px solid rgba(23,24,15,.07);">
+    <div class="amili-roi-cta" style="flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:10px 14px;border-left:1px solid rgba(23,24,15,.07);">
       <div>
-        <div style="font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(23,24,15,.4);margin-bottom:3px;">Estimert ROI</div>
-        <div id="res-roi" style="font-family:'IBM Plex Serif',serif;font-size:22px;font-weight:700;color:#17180f;letter-spacing:-.02em;line-height:1;">0 %</div>
+        <div style="font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:rgba(23,24,15,.4);margin-bottom:2px;">Estimert ROI</div>
+        <div id="res-roi" style="font-family:'IBM Plex Serif',serif;font-size:20px;font-weight:700;color:#17180f;letter-spacing:-.02em;line-height:1;">0 %</div>
       </div>
-      <a href="https://amili.no/no/kontakt/" target="_blank" style="display:inline-block;background:#00e9e8;color:#17180f;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;padding:9px 16px;border-radius:100px;text-decoration:none;white-space:nowrap;line-height:1;">Bli kunde</a>
+      <a href="https://amili.no/no/kontakt/" target="_blank" style="display:inline-block;background:#00e9e8;color:#17180f;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;padding:8px 14px;border-radius:100px;text-decoration:none;white-space:nowrap;line-height:1;">Bli kunde</a>
     </div>
 
   </div>
 
   <!-- Inputs -->
-  <div style="background:#fff;border-radius:0 0 16px 16px;border:1px solid rgba(23,24,15,.08);padding:14px 16px 16px;">
+  <div style="background:#fff;border-radius:0 0 16px 16px;border:1px solid rgba(23,24,15,.08);padding:10px 14px 12px;">
     <div class="amili-inputs-grid">
 
       <div style="display:flex;flex-direction:column;gap:7px;">
@@ -130,7 +130,7 @@
     </div>
   </div>
 
-  <p style="text-align:center;margin:10px 0 0;font-size:11px;color:rgba(23,24,15,.4);">Estimater basert på bransjesnitt. Faktiske tall vil variere. <a href="https://amili.no/no/" style="color:rgba(23,24,15,.6);text-decoration:none;border-bottom:1px solid rgba(23,24,15,.2);">amili.no</a></p>
+  <p style="text-align:center;margin:6px 0 0;font-size:10px;color:rgba(23,24,15,.35);">Estimater basert på bransjesnitt. <a href="https://amili.no/no/" style="color:rgba(23,24,15,.5);text-decoration:none;">amili.no</a></p>
 
 </div>
 
