@@ -3,12 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ROI-kalkulator | Amili</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=IBM+Plex+Serif:wght@700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { background: #fff; font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
-    input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 3px; border-radius: 100px; outline: none; cursor: pointer; border: none; display: block; }
+
+    .card { border: 1px solid rgba(23,24,15,.09); border-radius: 10px; overflow: hidden; }
+    .label { font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(23,24,15,.5); margin-bottom: 3px; }
+    .num  { font-family: 'IBM Plex Serif', serif; font-size: 20px; font-weight: 700; color: #17180f; letter-spacing: -.02em; line-height: 1; }
+    .metric-label { font-size: 9px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: rgba(23,24,15,.4); margin-bottom: 2px; }
+    .metric-val   { font-size: 12px; font-weight: 700; color: #17180f; }
+    .slider-label { font-size: 11px; font-weight: 500; color: rgba(23,24,15,.5); line-height: 1.25; }
+    .slider-val   { font-size: 11px; font-weight: 700; color: #17180f; background: #dafdff; border-radius: 4px; padding: 1px 6px; white-space: nowrap; flex-shrink: 0; }
+
+    input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 3px; border-radius: 100px; outline: none; cursor: pointer; border: none; display: block; margin-top: 6px; }
     input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #00e9e8; border: 2px solid #fff; box-shadow: 0 0 0 1px #00e9e8; cursor: pointer; margin-top: -5.5px; }
     input[type=range]::-webkit-slider-runnable-track { height: 3px; border-radius: 100px; }
     input[type=range]::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: #00e9e8; border: 2px solid #fff; cursor: pointer; }
@@ -17,98 +25,96 @@
 </head>
 <body>
 
-<div style="padding: 14px 14px 12px;">
+<div style="padding: 12px;">
 
-  <div style="font-family: 'IBM Plex Serif', serif; font-size: 16px; font-weight: 700; color: #17180f; margin-bottom: 10px; line-height: 1.2;">Hvor mye kan du spare med Amili?</div>
-
-  <!-- Results card -->
-  <div style="border: 1px solid rgba(23,24,15,.09); border-radius: 12px; overflow: hidden; margin-bottom: 8px;">
+  <!-- Results -->
+  <div class="card" style="margin-bottom: 6px;">
 
     <!-- Total + ROI + CTA -->
     <div id="res-header" style="background: #00e9e8; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; gap: 8px;">
       <div style="min-width: 0;">
-        <div style="font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(23,24,15,.55); margin-bottom: 2px;">Netto besparelse/år</div>
-        <div id="res-total" style="font-family: 'IBM Plex Serif', serif; font-size: 22px; font-weight: 700; color: #17180f; letter-spacing: -.02em; line-height: 1;">kr 0</div>
+        <div class="label">Netto besparelse/år</div>
+        <div id="res-total" class="num">kr 0</div>
       </div>
       <div style="display: flex; align-items: center; gap: 10px; flex-shrink: 0;">
         <div style="text-align: right;">
-          <div style="font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: rgba(23,24,15,.55); margin-bottom: 2px;">ROI</div>
-          <div id="res-roi" style="font-family: 'IBM Plex Serif', serif; font-size: 22px; font-weight: 700; color: #17180f; letter-spacing: -.02em; line-height: 1;">0 %</div>
+          <div class="label">ROI</div>
+          <div id="res-roi" class="num">0 %</div>
         </div>
-        <a href="https://amili.no/no/kontakt/" target="_blank" style="display: inline-block; background: #17180f; color: #fff; font-size: 11px; font-weight: 700; padding: 8px 14px; border-radius: 100px; text-decoration: none; white-space: nowrap; line-height: 1;">Bli kunde</a>
+        <a href="https://amili.no/no/kontakt/" target="_blank" style="display:inline-block;background:#17180f;color:#fff;font-size:11px;font-weight:700;padding:8px 14px;border-radius:100px;text-decoration:none;white-space:nowrap;line-height:1;">Bli kunde</a>
       </div>
     </div>
 
-    <!-- 2×2 metrics -->
+    <!-- 4 metrics in 2×2 grid -->
     <div style="display: grid; grid-template-columns: 1fr 1fr;">
-      <div style="padding: 8px 14px; border-right: 1px solid rgba(23,24,15,.07); border-top: 1px solid rgba(23,24,15,.07);">
-        <div style="font-size: 9px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: rgba(23,24,15,.4); margin-bottom: 2px;">Spart arbeid</div>
-        <div id="res-labor" style="font-size: 13px; font-weight: 700; color: #17180f;">kr 0</div>
+      <div style="padding: 8px 12px; border-top: 1px solid rgba(23,24,15,.07); border-right: 1px solid rgba(23,24,15,.07);">
+        <div class="metric-label">Spart arbeid</div>
+        <div id="res-labor" class="metric-val">kr 0</div>
       </div>
-      <div style="padding: 8px 14px; border-top: 1px solid rgba(23,24,15,.07);">
-        <div style="font-size: 9px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: rgba(23,24,15,.4); margin-bottom: 2px;">Raskere betaling</div>
-        <div id="res-cashflow" style="font-size: 13px; font-weight: 700; color: #17180f;">kr 0</div>
+      <div style="padding: 8px 12px; border-top: 1px solid rgba(23,24,15,.07);">
+        <div class="metric-label">Raskere betaling</div>
+        <div id="res-cashflow" class="metric-val">kr 0</div>
       </div>
-      <div style="padding: 8px 14px; border-right: 1px solid rgba(23,24,15,.07); border-top: 1px solid rgba(23,24,15,.07);">
-        <div style="font-size: 9px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: rgba(23,24,15,.4); margin-bottom: 2px;">Økt inndrivelse</div>
-        <div id="res-recovery" style="font-size: 13px; font-weight: 700; color: #17180f;">kr 0</div>
+      <div style="padding: 8px 12px; border-top: 1px solid rgba(23,24,15,.07); border-right: 1px solid rgba(23,24,15,.07);">
+        <div class="metric-label">Økt inndrivelse</div>
+        <div id="res-recovery" class="metric-val">kr 0</div>
       </div>
-      <div style="padding: 8px 14px; border-top: 1px solid rgba(23,24,15,.07);">
-        <div style="font-size: 9px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: rgba(23,24,15,.4); margin-bottom: 2px;">Kostnad Amili</div>
-        <div id="res-fee" style="font-size: 13px; font-weight: 700; color: rgba(23,24,15,.4);">- kr 0</div>
+      <div style="padding: 8px 12px; border-top: 1px solid rgba(23,24,15,.07);">
+        <div class="metric-label">Kostnad Amili</div>
+        <div id="res-fee" class="metric-val" style="color: rgba(23,24,15,.4);">- kr 0</div>
       </div>
     </div>
 
   </div>
 
-  <!-- Inputs card -->
-  <div style="border: 1px solid rgba(23,24,15,.09); border-radius: 12px; padding: 12px 14px 12px;">
+  <!-- Sliders -->
+  <div class="card" style="padding: 12px 14px;">
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px;">
 
-      <div style="display: flex; flex-direction: column; gap: 5px;">
+      <div>
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
-          <span style="font-size: 11px; font-weight: 500; color: rgba(23,24,15,.5); line-height: 1.2;">Fakturaer/mnd</span>
-          <span id="lbl-invoices" style="font-size: 11px; font-weight: 700; color: #17180f; background: #dafdff; border-radius: 4px; padding: 1px 6px; white-space: nowrap; flex-shrink: 0;">100</span>
+          <span class="slider-label">Fakturaer/mnd</span>
+          <span id="lbl-invoices" class="slider-val">100</span>
         </div>
         <input type="range" id="rng-invoices" min="10" max="2000" step="10" value="100">
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 5px;">
+      <div>
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
-          <span style="font-size: 11px; font-weight: 500; color: rgba(23,24,15,.5); line-height: 1.2;">Snitt kravbeløp (NOK)</span>
-          <span id="lbl-avgAmount" style="font-size: 11px; font-weight: 700; color: #17180f; background: #dafdff; border-radius: 4px; padding: 1px 6px; white-space: nowrap; flex-shrink: 0;">8 000</span>
+          <span class="slider-label">Snitt kravbeløp (NOK)</span>
+          <span id="lbl-avgAmount" class="slider-val">8 000</span>
         </div>
         <input type="range" id="rng-avgAmount" min="500" max="100000" step="500" value="8000">
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 5px;">
+      <div>
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
-          <span style="font-size: 11px; font-weight: 500; color: rgba(23,24,15,.5); line-height: 1.2;">Betalingstid (dager)</span>
-          <span id="lbl-dso" style="font-size: 11px; font-weight: 700; color: #17180f; background: #dafdff; border-radius: 4px; padding: 1px 6px; white-space: nowrap; flex-shrink: 0;">65 d</span>
+          <span class="slider-label">Betalingstid (dager)</span>
+          <span id="lbl-dso" class="slider-val">65 d</span>
         </div>
         <input type="range" id="rng-dso" min="15" max="150" step="5" value="65">
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 5px;">
+      <div>
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
-          <span style="font-size: 11px; font-weight: 500; color: rgba(23,24,15,.5); line-height: 1.2;">Timer purring/mnd</span>
-          <span id="lbl-hours" style="font-size: 11px; font-weight: 700; color: #17180f; background: #dafdff; border-radius: 4px; padding: 1px 6px; white-space: nowrap; flex-shrink: 0;">35 t</span>
+          <span class="slider-label">Timer purring/mnd</span>
+          <span id="lbl-hours" class="slider-val">35 t</span>
         </div>
         <input type="range" id="rng-hours" min="2" max="200" step="1" value="35">
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 5px;">
+      <div>
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
-          <span style="font-size: 11px; font-weight: 500; color: rgba(23,24,15,.5); line-height: 1.2;">Timekost (NOK/t)</span>
-          <span id="lbl-hourly" style="font-size: 11px; font-weight: 700; color: #17180f; background: #dafdff; border-radius: 4px; padding: 1px 6px; white-space: nowrap; flex-shrink: 0;">650</span>
+          <span class="slider-label">Timekost (NOK/t)</span>
+          <span id="lbl-hourly" class="slider-val">650</span>
         </div>
         <input type="range" id="rng-hourly" min="200" max="1500" step="50" value="650">
       </div>
 
-      <div style="display: flex; flex-direction: column; gap: 5px;">
+      <div>
         <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
-          <span style="font-size: 11px; font-weight: 500; color: rgba(23,24,15,.5); line-height: 1.2;">Innkassoprosent</span>
-          <span id="lbl-rate" style="font-size: 11px; font-weight: 700; color: #17180f; background: #dafdff; border-radius: 4px; padding: 1px 6px; white-space: nowrap; flex-shrink: 0;">70 %</span>
+          <span class="slider-label">Innkassoprosent</span>
+          <span id="lbl-rate" class="slider-val">70 %</span>
         </div>
         <input type="range" id="rng-rate" min="30" max="95" step="1" value="70">
       </div>
@@ -119,22 +125,25 @@
 </div>
 
 <script>
-(function(){
-  var DSO=32, RATE=92, CAP=0.05, FEE=0.18;
-  var s = { invoices:100, avgAmount:8000, dso:65, hours:35, hourly:650, rate:70 };
+(function () {
+  var DSO = 32, RATE = 92, CAP = 0.05, FEE = 0.18;
+  var s = { invoices: 100, avgAmount: 8000, dso: 65, hours: 35, hourly: 650, rate: 70 };
 
   function num(n) {
     n = Math.round(n);
-    var a = n.toString(), r = '', i = a.length;
-    while (i > 0) { r = (i < a.length ? ' ' : '') + a.slice(Math.max(0, i-3), i) + r; i -= 3; }
-    return r;
+    var str = String(n), out = '', len = str.length;
+    for (var i = 0; i < len; i++) {
+      if (i > 0 && (len - i) % 3 === 0) out += ' ';
+      out += str[i];
+    }
+    return out;
   }
-  function fmt(n) { return 'kr ' + num(n); }
-  function g(id) { return document.getElementById(id); }
+  function fmt(n) { return 'kr ' + num(n); }
+  function g(id)  { return document.getElementById(id); }
 
   function fill(el) {
     var p = ((+el.value - +el.min) / (+el.max - +el.min)) * 100;
-    el.style.background = 'linear-gradient(to right,#00e9e8 ' + p + '%,rgba(23,24,15,.10) ' + p + '%)';
+    el.style.background = 'linear-gradient(to right,#00e9e8 ' + p + '%,rgba(23,24,15,.12) ' + p + '%)';
   }
 
   function calc() {
@@ -150,33 +159,40 @@
     e = g('res-labor');    if (e) e.textContent = fmt(labor);
     e = g('res-cashflow'); if (e) e.textContent = fmt(cf);
     e = g('res-recovery'); if (e) e.textContent = fmt(recov);
-    e = g('res-fee');      if (e) e.textContent = '- ' + fmt(fee);
+    e = g('res-fee');      if (e) e.textContent = '- ' + fmt(fee);
     e = g('res-total');    if (e) e.textContent = fmt(net);
-    e = g('res-roi');      if (e) e.textContent = Math.round(roi) + ' %';
+    e = g('res-roi');      if (e) e.textContent = Math.round(roi) + ' %';
     e = g('res-header');   if (e) e.style.background = net >= 0 ? '#00e9e8' : '#ffb3b3';
+    sendHeight();
   }
 
   function bind(id, field, fn) {
     var el = g(id); if (!el) return;
     fill(el);
-    el.addEventListener('input', function() {
+    el.addEventListener('input', function () {
       s[field] = +this.value;
       var l = g('lbl-' + field); if (l) l.textContent = fn(this.value);
-      fill(this); calc();
+      fill(this);
+      calc();
     });
+  }
+
+  function sendHeight() {
+    window.parent.postMessage({ type: 'amili-resize', h: document.body.scrollHeight }, '*');
   }
 
   function init() {
     if (!g('rng-invoices')) { setTimeout(init, 50); return; }
-    bind('rng-invoices',  'invoices',  function(v) { return num(+v); });
-    bind('rng-avgAmount', 'avgAmount', function(v) { return num(+v); });
-    bind('rng-dso',       'dso',       function(v) { return v + ' d'; });
-    bind('rng-hours',     'hours',     function(v) { return v + ' t'; });
-    bind('rng-hourly',    'hourly',    function(v) { return num(+v); });
-    bind('rng-rate',      'rate',      function(v) { return v + ' %'; });
+    bind('rng-invoices',  'invoices',  function (v) { return num(+v); });
+    bind('rng-avgAmount', 'avgAmount', function (v) { return num(+v); });
+    bind('rng-dso',       'dso',       function (v) { return v + ' d'; });
+    bind('rng-hours',     'hours',     function (v) { return v + ' t'; });
+    bind('rng-hourly',    'hourly',    function (v) { return num(+v); });
+    bind('rng-rate',      'rate',      function (v) { return v + ' %'; });
     calc();
   }
 
+  window.addEventListener('load', sendHeight);
   init();
 })();
 </script>
